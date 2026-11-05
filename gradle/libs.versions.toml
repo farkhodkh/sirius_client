@@ -13,8 +13,19 @@ androidx-testRunner = "1.7.0"
 composeMultiplatform = "1.12.2"
 junit = "4.13.2"
 kotlin = "2.4.21"
+kotlinxCoroutines = "1.10.2"
+essenty = "2.5.0"
+kotlinSerialization = "1.9.0"
+ktor = "3.6.1"
+koin = "4.2.2"
+turbin = "1.2.1"
+sqldelight = "2.4.1"
+coil3 = "3.6.3"
 kotlin-wrappers = "2026.10.4"
+decompose = "3.4.0-alpha03"
 material3 = "1.12.0-alpha03"
+kotlinStdlib = "2.4.21"
+core = "1.7.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -37,9 +48,24 @@ compose-components-resources = { module = "org.jetbrains.compose.components:comp
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 wrappers-browser = { module = "org.jetbrains.kotlin-wrappers:kotlin-browser", version.ref = "kotlin-wrappers" }
 
+kotlin-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
+ktor = { module = "io.ktor:ktor-client-*", version.ref = "ktor" }
+koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbin" }
+sqldelight = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
+coil3 = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
+kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+essenty-lifecycle-coroutines = { module = "com.arkivanov.essenty:lifecycle-coroutines", version.ref = "essenty" }
+decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
+decompose-extensions = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlib" }
+androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidMultiplatformLibrary = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+androidLint = { id = "com.android.lint", version.ref = "agp" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
