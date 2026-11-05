@@ -24,3 +24,6 @@ node_modules/
 iosApp/Pods/
 iosApp/*.xcuserdata
 .env
+
+# Личные настройки Claude Code (общие .claude/settings.json и hooks коммитим)
+.claude/settings.local.json

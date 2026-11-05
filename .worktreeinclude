@@ -1,0 +1,3 @@
+# Файлы из .gitignore, которые нужно скопировать в новый worktree при параллельной работе агентов.
+# Без local.properties Android-сборка в worktree не найдёт sdk.dir.
+local.properties
