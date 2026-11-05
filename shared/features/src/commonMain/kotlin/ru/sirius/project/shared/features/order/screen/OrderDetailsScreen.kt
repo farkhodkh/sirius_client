@@ -38,6 +38,11 @@ fun OrderDetailsScreen(component: OrderDetailsComponent) {
                 Text("Статус: ${s.order.status}")
                 Text("Сумма: ${s.order.totalAmount} ${s.order.currency}")
                 Text("Создан: ${s.order.createdAt}")
+                Spacer(Modifier.height(12.dp))
+                Text("Позиции", style = MaterialTheme.typography.titleMedium)
+                s.order.items.forEach { item ->
+                    Text("${item.name} (${item.sku}) · ${item.quantity} × ${item.unitPrice}")
+                }
             }
         }
     }

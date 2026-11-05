@@ -50,7 +50,7 @@ fun OrderListScreen(component: OrderListComponent) {
                 items(s.orders, key = { it.id }) { order ->
                     Card(onClick = { component.onOrderClick(order.id) }, modifier = Modifier.fillMaxWidth()) {
                         Column(Modifier.padding(12.dp)) {
-                            Text("Заказ ${order.id} · ${order.status}")
+                            Text("Заказ ${order.id.take(8)} · ${order.status}")   // id на backend - UUID, показываем начало
                             Text("${order.totalAmount} ${order.currency}", style = MaterialTheme.typography.bodySmall)
                         }
                     }

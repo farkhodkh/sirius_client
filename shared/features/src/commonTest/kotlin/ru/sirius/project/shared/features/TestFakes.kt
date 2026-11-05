@@ -25,6 +25,7 @@ class FakeOrders(
     private var failCreateTimes: Int = 0,
 ) : OrderRepository {
     val usedKeys = mutableListOf<String>()
+    val drafts = mutableListOf<OrderDraft>()
 
     override suspend fun refresh(): List<Order> = orders
 
@@ -32,10 +33,11 @@ class FakeOrders(
 
     override suspend fun create(draft: OrderDraft, idempotencyKey: String): Order {
         usedKeys += idempotencyKey
+        drafts += draft
         if (failCreateTimes > 0) {
             failCreateTimes--
             error("network down")
         }
-        return Order("2", "NEW", draft.currency, draft.totalAmount, "2026-11-06T00:00:00Z")
+        return Order("2", "NEW", draft.currency, "3.00", "2026-11-06T00:00:00Z", draft.items)
     }
 }

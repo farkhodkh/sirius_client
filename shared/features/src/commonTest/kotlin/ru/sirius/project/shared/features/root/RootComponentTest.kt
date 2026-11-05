@@ -80,7 +80,9 @@ class RootComponentTest {
 
         assertIs<RootComponent.Child.OrderList>(root.stack.value.active.instance).component.onCreateClick()
         val create = assertIs<RootComponent.Child.OrderCreate>(root.stack.value.active.instance).component
-        create.onAmountChange("15.00")
+        create.onSkuChange("A1")
+        create.onNameChange("Pen")
+        create.onUnitPriceChange("15.00")
         create.onSubmitClick()
 
         assertIs<RootComponent.Child.OrderList>(root.stack.value.active.instance)

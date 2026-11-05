@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.androidLint)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -68,22 +69,36 @@ kotlin {
             dependencies {
                 implementation(libs.kotlin.stdlib)
                 implementation(project(":shared:domain"))
-                // Add KMP dependencies here
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.contentNegotiation)
+                implementation(libs.ktor.serialization.kotlinxJson)
+                implementation(libs.kotlin.serialization)
             }
         }
 
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.ktor.client.mock)
+                implementation(libs.kotlin.coroutines.test)
             }
         }
 
         androidMain {
             dependencies {
+                implementation(libs.ktor.client.okhttp)
                 // Add Android-specific dependencies here. Note that this source set depends on
                 // commonMain by default and will correctly pull the Android artifacts of any KMP
                 // dependencies declared in commonMain.
             }
+        }
+
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
+        }
+
+        wasmJsMain.dependencies {
+            implementation(libs.ktor.client.js)
         }
 
         getByName("androidDeviceTest") {
@@ -96,6 +111,7 @@ kotlin {
 
         iosMain {
             dependencies {
+                implementation(libs.ktor.client.darwin)
                 // Add iOS-specific dependencies here. This a source set created by Kotlin Gradle
                 // Plugin (KGP) that each specific iOS target (e.g., iosX64) depends on as
                 // part of KMP’s default source set hierarchy. Note that this source set depends

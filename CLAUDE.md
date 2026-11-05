@@ -10,8 +10,10 @@ ui → features → domain ← data. domain: чистый Kotlin, без Ktor/Co
 ## Команды
 - Сборка: ./gradlew build
 - Тесты: ./gradlew allTests
-- Android: ./gradlew :composeApp:assembleDebug
-- Web dev: ./gradlew :composeApp:wasmJsBrowserDevelopmentRun   # сверить имя задачи
+- Android: ./gradlew :androidApp:assembleDebug
+- Web dev: ./gradlew :webApp:wasmJsBrowserDevelopmentRun
+- iOS-фреймворк (проверка сборки): ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
+- Тесты слоя: ./gradlew :shared:features:testAndroidHostTest (аналогично :shared:data:)
 - iOS: сборка через Xcode (iosApp/iosApp.xcodeproj)
 
 ## Правила кода
@@ -29,3 +31,6 @@ ui → features → domain ← data. domain: чистый Kotlin, без Ktor/Co
 
 ## Backend
 «Сириус»: auth-service (OAuth2 PKCE), order-service (/api/v1/orders, Idempotency-Key). Спецификация: docs/openapi-order.yaml.
+- Клиент OAuth: `sirius-mobile` (публичный, PKCE обязателен, без секрета). Redirect URI: `world.sirius.app:/oauth2redirect`. Scope: `openid email orders.read orders.write`.
+- Публичным клиентам refresh-токен НЕ выдаётся. Access-токен живёт 10 минут; по `401` клиент заново идёт в системный браузер (SSO-сессия не просит пароль повторно). Токен хранить только в памяти.
+- `Idempotency-Key`: 8-64 символа, один ключ на «намерение» пользователя, при ретрае тот же.
