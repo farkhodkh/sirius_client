@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidMultiplatformLibrary)
@@ -33,13 +35,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "shared:uiKit"
-
-    iosX64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
+    val xcfName = "UiKit"
 
     iosArm64 {
         binaries.framework {
@@ -51,6 +47,15 @@ kotlin {
         binaries.framework {
             baseName = xcfName
         }
+    }
+
+    js {
+        browser()
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
     }
 
     // Source set declarations.

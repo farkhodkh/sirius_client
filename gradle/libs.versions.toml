@@ -55,6 +55,7 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbin" }
 sqldelight = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
 coil3 = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 essenty-lifecycle-coroutines = { module = "com.arkivanov.essenty:lifecycle-coroutines", version.ref = "essenty" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 decompose-extensions = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }

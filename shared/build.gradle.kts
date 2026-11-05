@@ -52,6 +52,10 @@ kotlin {
             implementation(libs.compose.uiTooling)
         }
         commonMain.dependencies {
+            api(project(":shared:features"))      // RootComponent виден платформенным приложениям
+            api(libs.decompose)                   // ComponentContext / LifecycleRegistry нужны точкам входа
+            implementation(project(":shared:domain"))
+            implementation(project(":shared:data"))
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)

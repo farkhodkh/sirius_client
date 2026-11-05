@@ -33,13 +33,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "composeAppKit"
-
-    iosX64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
+    val xcfName = "ComposeAppKit"
 
     iosArm64 {
         binaries.framework {

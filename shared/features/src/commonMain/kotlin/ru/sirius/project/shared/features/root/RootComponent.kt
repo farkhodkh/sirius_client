@@ -15,8 +15,7 @@ import ru.sirius.project.shared.features.order.OrderListComponent
 
 class RootComponent(
     componentContext: ComponentContext,
-    private val deps: Dependencies,          // фабрики дочерних компонентов (через Koin или вручную)
-    private val authState: AuthState,        // из domain: есть ли валидная сессия
+    private val deps: Dependencies,
 ) : ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Config>()
@@ -24,7 +23,7 @@ class RootComponent(
     val stack: Value<ChildStack<Config, Child>> = childStack(
         source = navigation,
         serializer = Config.serializer(),
-        initialConfiguration = if (authState.isSignedIn) Config.OrderList else Config.Login,
+        initialConfiguration = if (deps.auth.isSignedIn) Config.OrderList else Config.Login,
         handleBackButton = true,
         childFactory = ::createChild,
     )
@@ -32,18 +31,37 @@ class RootComponent(
     private fun createChild(config: Config, ctx: ComponentContext): Child = when (config) {
         Config.Login -> Child.Login(
             LoginComponent(
-                ctx,
-                deps.signIn
-            ) { navigation.replaceAll(Config.OrderList) })
-        Config.OrderList -> Child.OrderList(OrderListComponent(ctx, deps.orders,
-            onCreate = { navigation.pushNew(Config.OrderCreate) },
-            onOpen = { id -> navigation.pushNew(Config.OrderDetails(id)) }))
+                componentContext = ctx,
+                auth = deps.auth,
+                onSignedIn = { navigation.replaceAll(Config.OrderList) },
+            )
+        )
+
+        Config.OrderList -> Child.OrderList(
+            OrderListComponent(
+                componentContext = ctx,
+                repo = deps.orders,
+                onCreate = { navigation.pushNew(Config.OrderCreate) },
+                onOpen = { id -> navigation.pushNew(Config.OrderDetails(id)) },
+            )
+        )
+
         Config.OrderCreate -> Child.OrderCreate(
             OrderCreateComponent(
-                ctx,
-                deps.createOrder
-            ) { navigation.pop() })
-        is Config.OrderDetails -> Child.OrderDetails(OrderDetailsComponent(ctx, config.orderId, deps.orders) { navigation.pop() })
+                componentContext = ctx,
+                repo = deps.orders,
+                onFinished = { navigation.pop() },
+            )
+        )
+
+        is Config.OrderDetails -> Child.OrderDetails(
+            OrderDetailsComponent(
+                componentContext = ctx,
+                orderId = config.orderId,
+                repo = deps.orders,
+                onBack = { navigation.pop() },
+            )
+        )
     }
 
     sealed interface Child {

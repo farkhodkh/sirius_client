@@ -1,10 +1,12 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.androidLint)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.composeMultiplatform)
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.composeCompiler)
 }
 
 kotlin {
@@ -36,13 +38,7 @@ kotlin {
     // A step-by-step guide on how to include this library in an XCode
     // project can be found here:
     // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "shared:featuresKit"
-
-    iosX64 {
-        binaries.framework {
-            baseName = xcfName
-        }
-    }
+    val xcfName = "FeaturesKit"
 
     iosArm64 {
         binaries.framework {
@@ -54,6 +50,15 @@ kotlin {
         binaries.framework {
             baseName = xcfName
         }
+    }
+
+    js {
+        browser()
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
     }
 
     // Source set declarations.
@@ -72,9 +77,9 @@ kotlin {
                 implementation(libs.kotlin.coroutines)
                 implementation(libs.essenty.lifecycle.coroutines)
 
-                implementation(compose.runtime)
-                implementation(compose.foundation)
-                implementation(compose.material3)
+                implementation(libs.compose.runtime)
+                implementation(libs.compose.foundation)
+                implementation(libs.compose.material3)
                 // Add KMP dependencies here
             }
         }
@@ -82,6 +87,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(libs.kotlin.test)
+                implementation(libs.kotlin.coroutines.test)
             }
         }
 
