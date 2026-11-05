@@ -15,12 +15,16 @@ ui → features → domain ← data. domain: чистый Kotlin, без Ktor/Co
 - iOS-фреймворк (проверка сборки): ./gradlew :shared:linkDebugFrameworkIosSimulatorArm64
 - Тесты слоя: ./gradlew :shared:features:testAndroidHostTest (аналогично :shared:data:)
 - iOS: сборка через Xcode (iosApp/iosApp.xcodeproj)
+- Форматирование (Spotless + ktlint): ./gradlew spotlessApply (исправить), ./gradlew spotlessCheck (проверить)
+- Линтер (detekt): ./gradlew detekt; baseline при необходимости: ./gradlew detektBaseline
 
 ## Правила кода
 - Логика экранов только в компонентах Decompose, @Composable без бизнес-логики.
 - Состояние: sealed interface + StateFlow, события вверх колбэками.
 - Деньги не в Double. Секреты, токены и ключи не логировать и не коммитить.
 - Конфигурации навигации @Serializable.
+- Стиль задан в .editorconfig (ktlint_official, строка до 140). Не оставляй wildcard-импортов. Код, который агент пишет, должен проходить spotlessCheck и detekt; в конце шага перечисли эти команды среди команд проверки.
+- Правила detekt: config/detekt/detekt.yml. Не отключай правило и не добавляй @Suppress без согласования; обоснованное исключение записывай в detekt.yml с комментарием.
 - Изменение схемы SQLDelight = миграция, согласовать со мной.
 
 ## Процесс

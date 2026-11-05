@@ -16,7 +16,6 @@ class OrderDetailsComponent(
     private val repo: OrderRepository,
     private val onBack: () -> Unit,
 ) : ComponentContext by componentContext {
-
     private val scope = coroutineScope()
     private val _state = MutableStateFlow<OrderDetailsState>(OrderDetailsState.Loading)
     val state: StateFlow<OrderDetailsState> = _state.asStateFlow()
@@ -28,13 +27,14 @@ class OrderDetailsComponent(
     fun load() {
         scope.launch {
             _state.value = OrderDetailsState.Loading
-            _state.value = try {
-                repo.get(orderId)?.let { OrderDetailsState.Content(it) } ?: OrderDetailsState.NotFound
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                OrderDetailsState.Error(e.message ?: "Ошибка")
-            }
+            _state.value =
+                try {
+                    repo.get(orderId)?.let { OrderDetailsState.Content(it) } ?: OrderDetailsState.NotFound
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    OrderDetailsState.Error(e.message ?: "Ошибка")
+                }
         }
     }
 
@@ -43,7 +43,14 @@ class OrderDetailsComponent(
 
 sealed interface OrderDetailsState {
     data object Loading : OrderDetailsState
+
     data object NotFound : OrderDetailsState
-    data class Content(val order: Order) : OrderDetailsState
-    data class Error(val message: String) : OrderDetailsState
+
+    data class Content(
+        val order: Order,
+    ) : OrderDetailsState
+
+    data class Error(
+        val message: String,
+    ) : OrderDetailsState
 }

@@ -40,18 +40,27 @@ fun OrderListScreen(component: OrderListComponent) {
         Spacer(Modifier.height(16.dp))
 
         when (val s = state) {
-            OrderListState.Loading -> CircularProgressIndicator()
-            OrderListState.Empty -> Text("Заказов пока нет")
+            OrderListState.Loading -> {
+                CircularProgressIndicator()
+            }
+
+            OrderListState.Empty -> {
+                Text("Заказов пока нет")
+            }
+
             is OrderListState.Error -> {
                 Text(s.message, color = MaterialTheme.colorScheme.error)
                 Button(onClick = component::refresh) { Text("Повторить") }
             }
-            is OrderListState.Content -> LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(s.orders, key = { it.id }) { order ->
-                    Card(onClick = { component.onOrderClick(order.id) }, modifier = Modifier.fillMaxWidth()) {
-                        Column(Modifier.padding(12.dp)) {
-                            Text("Заказ ${order.id.take(8)} · ${order.status}")   // id на backend - UUID, показываем начало
-                            Text("${order.totalAmount} ${order.currency}", style = MaterialTheme.typography.bodySmall)
+
+            is OrderListState.Content -> {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(s.orders, key = { it.id }) { order ->
+                        Card(onClick = { component.onOrderClick(order.id) }, modifier = Modifier.fillMaxWidth()) {
+                            Column(Modifier.padding(12.dp)) {
+                                Text("Заказ ${order.id.take(8)} · ${order.status}") // id на backend - UUID, показываем начало
+                                Text("${order.totalAmount} ${order.currency}", style = MaterialTheme.typography.bodySmall)
+                            }
                         }
                     }
                 }

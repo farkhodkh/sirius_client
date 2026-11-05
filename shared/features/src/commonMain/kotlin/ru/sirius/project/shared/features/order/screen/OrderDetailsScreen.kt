@@ -27,12 +27,19 @@ fun OrderDetailsScreen(component: OrderDetailsComponent) {
         Spacer(Modifier.height(16.dp))
 
         when (val s = state) {
-            OrderDetailsState.Loading -> CircularProgressIndicator()
-            OrderDetailsState.NotFound -> Text("Заказ не найден")
+            OrderDetailsState.Loading -> {
+                CircularProgressIndicator()
+            }
+
+            OrderDetailsState.NotFound -> {
+                Text("Заказ не найден")
+            }
+
             is OrderDetailsState.Error -> {
                 Text(s.message, color = MaterialTheme.colorScheme.error)
                 Button(onClick = component::load) { Text("Повторить") }
             }
+
             is OrderDetailsState.Content -> {
                 Text("Заказ ${s.order.id}", style = MaterialTheme.typography.headlineSmall)
                 Text("Статус: ${s.order.status}")

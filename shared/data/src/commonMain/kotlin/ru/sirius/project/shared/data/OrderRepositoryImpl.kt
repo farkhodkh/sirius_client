@@ -18,21 +18,21 @@ class OrderRepositoryImpl(
     client: HttpClient,
     tokens: AccessTokenProvider,
 ) : OrderRepository {
-
     private val api = OrderApi(client, tokens)
 
-    override suspend fun refresh(): List<Order> =
-        api.list(page = 0, size = PAGE_SIZE).content.map { it.toDomain() }
+    override suspend fun refresh(): List<Order> = api.list(page = 0, size = PAGE_SIZE).content.map { it.toDomain() }
 
     override suspend fun get(id: String): Order? =
         try {
             api.get(id).toDomain()
-        } catch (e: AppException.NotFound) {
-            null
+        } catch (ignored: AppException.NotFound) {
+            null // отсутствие заказа не ошибка для вызывающего: возвращаем null
         }
 
-    override suspend fun create(draft: OrderDraft, idempotencyKey: String): Order =
-        api.create(draft.toDto(), idempotencyKey).toDomain()
+    override suspend fun create(
+        draft: OrderDraft,
+        idempotencyKey: String,
+    ): Order = api.create(draft.toDto(), idempotencyKey).toDomain()
 
     private companion object {
         const val PAGE_SIZE = 50

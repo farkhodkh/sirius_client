@@ -14,8 +14,9 @@ import ru.sirius.project.shared.features.root.RootComponent
 fun createRoot(componentContext: ComponentContext): RootComponent =
     RootComponent(
         componentContext = componentContext,
-        deps = Dependencies(
-            auth = FakeAuthRepository(),
-            orders = FakeOrderRepository(),
-        ),
+        deps =
+            Dependencies(
+                auth = FakeAuthRepository(),
+                orders = FakeOrderRepository(),
+            ),
     )

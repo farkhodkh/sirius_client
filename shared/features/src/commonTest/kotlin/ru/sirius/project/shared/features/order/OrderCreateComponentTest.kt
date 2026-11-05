@@ -19,14 +19,16 @@ import kotlin.test.assertNotNull
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class OrderCreateComponentTest {
-
     @BeforeTest
     fun setUp() = Dispatchers.setMain(UnconfinedTestDispatcher())
 
     @AfterTest
     fun tearDown() = Dispatchers.resetMain()
 
-    private fun component(repo: FakeOrders, onFinished: () -> Unit = {}): OrderCreateComponent {
+    private fun component(
+        repo: FakeOrders,
+        onFinished: () -> Unit = {},
+    ): OrderCreateComponent {
         val lifecycle = LifecycleRegistry()
         return OrderCreateComponent(DefaultComponentContext(lifecycle), repo, onFinished)
             .also { lifecycle.resume() }
@@ -60,9 +62,9 @@ class OrderCreateComponentTest {
         val component = component(repo) { finished++ }
         component.fillValid()
 
-        component.onSubmitClick()                       // первая попытка падает
+        component.onSubmitClick() // первая попытка падает
         assertNotNull(component.state.value.error)
-        component.onSubmitClick()                       // повтор пользователя
+        component.onSubmitClick() // повтор пользователя
 
         assertEquals(2, repo.usedKeys.size)
         assertEquals(repo.usedKeys[0], repo.usedKeys[1], "при ретрае ключ обязан совпадать")
@@ -95,14 +97,15 @@ class OrderCreateComponentTest {
 
     @Test
     fun invalidValues_areRejectedWithoutRequest() {
-        val invalid = listOf(
-            "quantity 0" to { c: OrderCreateComponent -> c.onQuantityChange("0") },
-            "quantity 1001" to { c: OrderCreateComponent -> c.onQuantityChange("1001") },
-            "quantity text" to { c: OrderCreateComponent -> c.onQuantityChange("abc") },
-            "price 3 decimals" to { c: OrderCreateComponent -> c.onUnitPriceChange("1.505") },
-            "price comma" to { c: OrderCreateComponent -> c.onUnitPriceChange("1,50") },
-            "currency short" to { c: OrderCreateComponent -> c.onCurrencyChange("US") },
-        )
+        val invalid =
+            listOf(
+                "quantity 0" to { c: OrderCreateComponent -> c.onQuantityChange("0") },
+                "quantity 1001" to { c: OrderCreateComponent -> c.onQuantityChange("1001") },
+                "quantity text" to { c: OrderCreateComponent -> c.onQuantityChange("abc") },
+                "price 3 decimals" to { c: OrderCreateComponent -> c.onUnitPriceChange("1.505") },
+                "price comma" to { c: OrderCreateComponent -> c.onUnitPriceChange("1,50") },
+                "currency short" to { c: OrderCreateComponent -> c.onCurrencyChange("US") },
+            )
 
         for ((caseName, breakIt) in invalid) {
             val repo = FakeOrders()

@@ -6,12 +6,13 @@ plugins {
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.detekt)
 }
 
 kotlin {
     listOf(
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "Shared"
@@ -28,23 +29,29 @@ kotlin {
         binaries.executable()
     }
     android {
-       namespace = "ru.sirius.project.shared"
-       compileSdk = libs.versions.android.compileSdk.get().toInt()
-       minSdk = libs.versions.android.minSdk.get().toInt()
-       compilerOptions {
-           jvmTarget = JvmTarget.JVM_11
-       }
-       androidResources {
-           enable = true
-       }
-       withHostTest {
-           isIncludeAndroidResources = true
-       }
-       withDeviceTestBuilder {
-           sourceSetTreeName = "test"
-       }.configure {
-           instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-       }
+        namespace = "ru.sirius.project.shared"
+        compileSdk =
+            libs.versions.android.compileSdk
+                .get()
+                .toInt()
+        minSdk =
+            libs.versions.android.minSdk
+                .get()
+                .toInt()
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
+        androidResources {
+            enable = true
+        }
+        withHostTest {
+            isIncludeAndroidResources = true
+        }
+        withDeviceTestBuilder {
+            sourceSetTreeName = "test"
+        }.configure {
+            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
     }
     sourceSets {
         androidMain.dependencies {
@@ -52,8 +59,8 @@ kotlin {
             implementation(libs.compose.uiTooling)
         }
         commonMain.dependencies {
-            api(project(":shared:features"))      // RootComponent виден платформенным приложениям
-            api(libs.decompose)                   // ComponentContext / LifecycleRegistry нужны точкам входа
+            api(project(":shared:features")) // RootComponent виден платформенным приложениям
+            api(libs.decompose) // ComponentContext / LifecycleRegistry нужны точкам входа
             implementation(project(":shared:domain"))
             implementation(project(":shared:data"))
             implementation(libs.compose.runtime)
@@ -79,4 +86,13 @@ kotlin {
 
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)
+}
+
+detekt {
+    buildUponDefaultConfig = true // правила по умолчанию + исключения из config/detekt/detekt.yml
+    config.setFrom(rootProject.file("config/detekt/detekt.yml"))
+    source.setFrom("src") // все source sets KMP: commonMain, androidMain, тесты
+    baseline = file("detekt-baseline.xml") // создаётся командой detektBaseline; пока файла нет, не используется
+    parallel = true
+    basePath.set(rootProject.projectDir)
 }

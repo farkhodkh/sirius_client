@@ -14,7 +14,6 @@ class LoginComponent(
     private val auth: AuthRepository,
     private val onSignedIn: () -> Unit,
 ) : ComponentContext by componentContext {
-
     private val scope = coroutineScope()
     private val _state = MutableStateFlow<LoginState>(LoginState.Idle)
     val state: StateFlow<LoginState> = _state.asStateFlow()
@@ -37,6 +36,10 @@ class LoginComponent(
 
 sealed interface LoginState {
     data object Idle : LoginState
+
     data object Loading : LoginState
-    data class Error(val message: String) : LoginState
+
+    data class Error(
+        val message: String,
+    ) : LoginState
 }

@@ -1,0 +1,31 @@
+# Дополняет правила detekt по умолчанию (в модулях включено buildUponDefaultConfig = true).
+# Если detekt сообщит о неизвестном ключе (версия 2.x ещё альфа): ./gradlew detektGenerateConfig
+# и сверьте имя ключа с созданным файлом.
+#
+# Тесты исключаем маской **/*Test/**: в KMP каталоги тестов называются commonTest, androidHostTest,
+# androidDeviceTest, iosTest, webTest и т.д., а в правилах по умолчанию перечислены не все.
+
+naming:
+  FunctionNaming:
+    # Compose: @Composable-функции пишутся с заглавной буквы; в тестах допустимы имена вида case_expected
+    ignoreAnnotated: ['Composable']
+    excludes: ['**/test/**', '**/*Test/**', '**/*Test.kt']
+  MatchingDeclarationName:
+    # В KMP файлы Platform.android.kt, Platform.ios.kt и т.п. по смыслу не совпадают с классом внутри;
+    # соответствие имён файлов проверяет ktlint (правило filename).
+    active: false
+
+style:
+  MagicNumber:
+    # Размеры .dp и подобное в UI не выносим в константы; в тестах числа тоже допустимы
+    ignoreAnnotated: ['Composable']
+    excludes: ['**/test/**', '**/*Test/**', '**/*Test.kt']
+  MaxLineLength:
+    # Согласовано с ktlint (.editorconfig: max_line_length = 140)
+    maxLineLength: 140
+
+exceptions:
+  TooGenericExceptionCaught:
+    # На границе слоя data (сеть) мы намеренно ловим Exception и превращаем в AppException,
+    # CancellationException при этом перебрасывается явно. Правило давало бы ложные срабатывания.
+    active: false

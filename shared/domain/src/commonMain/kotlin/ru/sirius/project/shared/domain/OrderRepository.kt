@@ -13,5 +13,8 @@ interface OrderRepository {
      *
      * @throws AppException при ошибках сети, авторизации и валидации
      */
-    suspend fun create(draft: OrderDraft, idempotencyKey: String): Order
+    suspend fun create(
+        draft: OrderDraft,
+        idempotencyKey: String,
+    ): Order
 }

@@ -29,7 +29,10 @@ internal object DecimalAsString : KSerializer<String> {
         return json.decodeJsonElement().jsonPrimitive.content
     }
 
-    override fun serialize(encoder: Encoder, value: String) {
+    override fun serialize(
+        encoder: Encoder,
+        value: String,
+    ) {
         val json = encoder as? JsonEncoder ?: throw SerializationException("DecimalAsString работает только с JSON")
         if (!NUMBER.matches(value)) throw SerializationException("Не число: $value")
         json.encodeJsonElement(JsonUnquotedLiteral(value))

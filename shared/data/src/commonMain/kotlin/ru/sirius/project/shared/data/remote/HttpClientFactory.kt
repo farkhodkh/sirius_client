@@ -15,9 +15,10 @@ data class ApiConfig(
     val apiBaseUrl: String,
 )
 
-internal val apiJson = Json {
-    ignoreUnknownKeys = true   // backend может добавить поля, клиент не должен падать
-}
+internal val apiJson =
+    Json {
+        ignoreUnknownKeys = true // backend может добавить поля, клиент не должен падать
+    }
 
 /**
  * Создаёт HTTP-клиент. Если [engine] не указан, Ktor берёт движок платформы из зависимостей
@@ -26,7 +27,10 @@ internal val apiJson = Json {
  * Плагина Auth здесь нет намеренно: refresh-токена у публичного клиента нет, а токен подставляет
  * [OrderApi] на каждый запрос. Логирование запросов не подключено, чтобы токен не попал в лог.
  */
-fun createHttpClient(config: ApiConfig, engine: HttpClientEngine? = null): HttpClient =
+fun createHttpClient(
+    config: ApiConfig,
+    engine: HttpClientEngine? = null,
+): HttpClient =
     if (engine == null) {
         HttpClient { configure(config) }
     } else {
@@ -36,8 +40,11 @@ fun createHttpClient(config: ApiConfig, engine: HttpClientEngine? = null): HttpC
 private fun HttpClientConfig<*>.configure(config: ApiConfig) {
     install(ContentNegotiation) { json(apiJson) }
     install(HttpTimeout) {
-        connectTimeoutMillis = 10_000
-        requestTimeoutMillis = 15_000
+        connectTimeoutMillis = CONNECT_TIMEOUT_MS
+        requestTimeoutMillis = REQUEST_TIMEOUT_MS
     }
     defaultRequest { url(config.apiBaseUrl) }
 }
+
+private const val CONNECT_TIMEOUT_MS = 10_000L
+private const val REQUEST_TIMEOUT_MS = 15_000L

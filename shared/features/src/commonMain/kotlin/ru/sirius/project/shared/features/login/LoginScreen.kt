@@ -29,8 +29,14 @@ fun LoginScreen(component: LoginComponent) {
         Text("Сириус", style = MaterialTheme.typography.headlineMedium)
         Spacer(Modifier.height(24.dp))
         when (val s = state) {
-            LoginState.Loading -> CircularProgressIndicator()
-            LoginState.Idle -> Button(onClick = component::onSignInClick) { Text("Войти") }
+            LoginState.Loading -> {
+                CircularProgressIndicator()
+            }
+
+            LoginState.Idle -> {
+                Button(onClick = component::onSignInClick) { Text("Войти") }
+            }
+
             is LoginState.Error -> {
                 Text(s.message, color = MaterialTheme.colorScheme.error)
                 Spacer(Modifier.height(12.dp))

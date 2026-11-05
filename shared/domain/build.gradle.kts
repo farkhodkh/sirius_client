@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.androidLint)
+    alias(libs.plugins.detekt)
 }
 
 kotlin {
@@ -103,5 +104,13 @@ kotlin {
             }
         }
     }
+}
 
+detekt {
+    buildUponDefaultConfig = true // правила по умолчанию + исключения из config/detekt/detekt.yml
+    config.setFrom(rootProject.file("config/detekt/detekt.yml"))
+    source.setFrom("src") // все source sets KMP: commonMain, androidMain, тесты
+    baseline = file("detekt-baseline.xml") // создаётся командой detektBaseline; пока файла нет, не используется
+    parallel = true
+    basePath.set(rootProject.projectDir)
 }

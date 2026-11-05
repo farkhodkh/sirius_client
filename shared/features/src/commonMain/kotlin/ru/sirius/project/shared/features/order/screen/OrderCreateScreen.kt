@@ -56,7 +56,12 @@ fun OrderCreateScreen(component: OrderCreateComponent) {
 }
 
 @Composable
-private fun Field(label: String, value: String, onChange: (String) -> Unit, enabled: Boolean) {
+private fun Field(
+    label: String,
+    value: String,
+    onChange: (String) -> Unit,
+    enabled: Boolean,
+) {
     OutlinedTextField(
         value = value,
         onValueChange = onChange,

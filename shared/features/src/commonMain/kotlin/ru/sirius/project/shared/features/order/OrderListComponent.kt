@@ -16,7 +16,6 @@ class OrderListComponent(
     private val onCreate: () -> Unit,
     private val onOpen: (String) -> Unit,
 ) : ComponentContext by componentContext {
-
     private val scope = coroutineScope()
     private val _state = MutableStateFlow<OrderListState>(OrderListState.Loading)
     val state: StateFlow<OrderListState> = _state.asStateFlow()
@@ -28,14 +27,15 @@ class OrderListComponent(
     fun refresh() {
         scope.launch {
             _state.value = OrderListState.Loading
-            _state.value = try {
-                val orders = repo.refresh()
-                if (orders.isEmpty()) OrderListState.Empty else OrderListState.Content(orders)
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                OrderListState.Error(e.message ?: "Ошибка")
-            }
+            _state.value =
+                try {
+                    val orders = repo.refresh()
+                    if (orders.isEmpty()) OrderListState.Empty else OrderListState.Content(orders)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    OrderListState.Error(e.message ?: "Ошибка")
+                }
         }
     }
 
@@ -46,7 +46,14 @@ class OrderListComponent(
 
 sealed interface OrderListState {
     data object Loading : OrderListState
+
     data object Empty : OrderListState
-    data class Content(val orders: List<Order>) : OrderListState
-    data class Error(val message: String) : OrderListState
+
+    data class Content(
+        val orders: List<Order>,
+    ) : OrderListState
+
+    data class Error(
+        val message: String,
+    ) : OrderListState
 }

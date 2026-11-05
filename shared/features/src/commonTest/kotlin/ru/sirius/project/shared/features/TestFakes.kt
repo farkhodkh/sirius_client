@@ -6,7 +6,9 @@ import ru.sirius.project.shared.domain.OrderDraft
 import ru.sirius.project.shared.domain.OrderRepository
 
 /** Fake вместо mock: проще читать и не ломается при рефакторинге. */
-class FakeAuth(signedIn: Boolean = false) : AuthRepository {
+class FakeAuth(
+    signedIn: Boolean = false,
+) : AuthRepository {
     override var isSignedIn: Boolean = signedIn
         private set
 
@@ -31,7 +33,10 @@ class FakeOrders(
 
     override suspend fun get(id: String): Order? = orders.firstOrNull { it.id == id }
 
-    override suspend fun create(draft: OrderDraft, idempotencyKey: String): Order {
+    override suspend fun create(
+        draft: OrderDraft,
+        idempotencyKey: String,
+    ): Order {
         usedKeys += idempotencyKey
         drafts += draft
         if (failCreateTimes > 0) {

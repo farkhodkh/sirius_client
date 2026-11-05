@@ -10,19 +10,21 @@ internal fun ItemDto.toDomain() = OrderItem(sku = sku, name = name, quantity = q
 
 internal fun OrderDraft.toDto() = CreateOrderRequestDto(currency = currency, items = items.map { it.toDto() })
 
-internal fun OrderDto.toDomain() = Order(
-    id = id,
-    status = status,
-    currency = currency,
-    totalAmount = totalAmount,
-    createdAt = createdAt,
-    items = items.map { it.toDomain() },
-)
+internal fun OrderDto.toDomain() =
+    Order(
+        id = id,
+        status = status,
+        currency = currency,
+        totalAmount = totalAmount,
+        createdAt = createdAt,
+        items = items.map { it.toDomain() },
+    )
 
-internal fun OrderSummaryDto.toDomain() = Order(
-    id = id,
-    status = status,
-    currency = currency,
-    totalAmount = totalAmount,
-    createdAt = createdAt,
-)
+internal fun OrderSummaryDto.toDomain() =
+    Order(
+        id = id,
+        status = status,
+        currency = currency,
+        totalAmount = totalAmount,
+        createdAt = createdAt,
+    )

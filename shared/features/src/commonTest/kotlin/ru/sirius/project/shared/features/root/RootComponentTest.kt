@@ -19,7 +19,6 @@ import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class RootComponentTest {
-
     // Компоненты запускают корутины на Dispatchers.Main (Essenty), в тесте на JVM его нет: подменяем.
     @BeforeTest
     fun setUp() = Dispatchers.setMain(UnconfinedTestDispatcher())
@@ -29,10 +28,11 @@ class RootComponentTest {
 
     private fun createRoot(signedIn: Boolean): RootComponent {
         val lifecycle = LifecycleRegistry()
-        val root = RootComponent(
-            componentContext = DefaultComponentContext(lifecycle),
-            deps = Dependencies(auth = FakeAuth(signedIn), orders = FakeOrders()),
-        )
+        val root =
+            RootComponent(
+                componentContext = DefaultComponentContext(lifecycle),
+                deps = Dependencies(auth = FakeAuth(signedIn), orders = FakeOrders()),
+            )
         lifecycle.resume()
         return root
     }
@@ -58,7 +58,11 @@ class RootComponentTest {
         assertIs<RootComponent.Child.Login>(root.stack.value.active.instance).component.onSignInClick()
 
         assertIs<RootComponent.Child.OrderList>(root.stack.value.active.instance)
-        assertTrue(root.stack.value.backStack.isEmpty(), "после входа Login не должен оставаться в стеке")
+        assertTrue(
+            root.stack.value.backStack
+                .isEmpty(),
+            "после входа Login не должен оставаться в стеке",
+        )
     }
 
     @Test
